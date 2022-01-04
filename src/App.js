@@ -61,8 +61,9 @@ function App() {
             </div>
           </div>
         </Route>
-        <Route path="/detail">
-          <DetailComponent />
+        <Route path="/detail/:id">
+          {/* 무엇을 입력하든간에 /detail로 가주세요라는 의미 url 파라미터 문법임 */}
+          <DetailComponent shoes={shoes} />
         </Route>
         {/* <Route path="/어쩌구" component={Modal}></Route> */}
               
