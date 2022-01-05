@@ -1,0 +1,43 @@
+@import './reset.scss';
+// sass에서의 다른 scss파일 import 해오기
+// sass 문법 사용법
+$mainColor : #ff0000;
+// sass에서의 변수 선언
+.red{
+    background-color: $mainColor;
+}
+
+div.container {
+    h4 {
+        color: aqua;
+    }
+    p {
+        color: seagreen;
+    }
+}
+// css의 셀렉터 대신 사용하는 nesting
+
+@mixin 함수() {
+    background: #eeeeee;
+    padding: 20px;
+    border-radius: 5px;
+    max-width: 500px;
+    width: 100%;
+    margin: auto;
+    p {
+        text-align: center;
+        margin-bottom: 0;
+    }
+}
+// @mixin : sass의 함수 만드는 문법
+
+.my-alert {
+    @include 함수()
+}
+
+.my-alert2 {
+    @extend .my-alert;
+    background: #ffe591;
+}
+// @extend : .my-alert의 모든 속성을 복사 붙여넣기한다
+

@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 // styled-components 컴포넌트 가져오기
+import './Detail.scss';
+// css파일 import 해오는 법
 
 let 박스 = styled.div`
     padding: 20px;
@@ -16,7 +18,59 @@ let 제목 = styled.h4`
 
 // react 컴포넌트를 외부 파일에서 작성하기 위해, 외부 파일에서 react를 import로 호출해야한다
 // 이처럼 다른 파일에 컴포넌트를 만드는 것을 모듈화라고 한다
+
+
+
+// Lifecycle Hook(구버전)
+// class Detail2 extends React.Component {
+//     // Detail2 컴포넌트가 실행이 되기전에 실행
+//     componentDidMount() {
+//         // ex) ajax같은걸 여기서 요청을 할 수도 있다!
+//     }
+
+//     // 컴포넌트가 Unmount(사라지기전)에 실행
+//     componentWillUnmount() {
+
+//     }
+// }
+
+
 function DetailComponent(props) {
+
+    let [alertState, alertStateChg ] = useState(true);
+    let [inData, inDataChg] = useState("");
+
+    // 최신버전 hook useEffect
+    useEffect(()=>{
+        // 컴포넌트가 mount(실행) 되었을때
+        // 컴포넌트가 update 될 때
+        // 특정 코드를 실행할 수 있음
+       // console.log("와! 샌즈! 파피루스! WA!!!!!!!!!!!!!!!!");
+        // 2초뒤에 죽는 alert창만들기(숙제)
+        let times = setTimeout(()=>{
+            // 방법1 html을 날린다
+            //document.getElementsByClassName("my-alert2")[0].outerHTML = null;
+            // 방법2 css display를 none처리한다
+            //document.getElementsByClassName("my-alert2")[0].style.display = "none";
+            // 해답편
+            alertStateChg(false);
+        }, 3000);
+        // setTimeout 같은경우는 뒤로가기 후 재진입시 오류가 발생할 수 있으므로.. return삭제해줘야한다
+
+        // 해당 컴포넌트가 삭제될때 코드를 실행할 수 있는 방법
+        return function detailUnMount() {
+            // ()=>{}로도 대체가능
+            console.log("끼요르힝힝");
+            clearTimeout(times); // setTimeout을 제거하는 방법
+        }
+    },[alertState]); // useEffect가 실행되는 조건을 설정할 수 있다. 이 구문의 의미는 alertState라는 스테이트가 업데이트될떄만 실행되주세요 라는 조건
+    // useEffect는 여러번 선언해도 괜찮지만, 윗순서부터 실행됨
+    // useEffect(()=>{
+    //     //console.log("우효ww");
+    // },[inData])
+    useEffect(()=>{
+        console.log("로드시 단 한번!");
+    },[]) // 이렇게 매개변수를 공백으로 두면, 페이지가 실행될때만 딱 한번 실행됨
 
     let { id } = useParams(); // react router 5버전이상에서 사용가능한 훅, 변수명으로 파라미터명을 매칭시켜주면됨
     let history = useHistory(); // react-router-dom 5버전이상에서만 사용 가능한 훅(useHistory)
@@ -28,9 +82,19 @@ function DetailComponent(props) {
     return (
         <div className="container">
             <박스>
-                <제목 색상="red">상세페이지입니다.</제목>
-                <제목 색상={"blue"}>상세페이지입니다.</제목>
+                <제목 className="red" 색상={"blue"}>상세페이지입니다.</제목>
             </박스>
+
+            <input onInput={(e)=>{inDataChg(e.target.value)}}/>
+            {inData}
+            {
+                alertState === true
+                ? (<div className="my-alert">
+                        <p>재고가 얼마 남지 않았습니다! 품절임박!</p>
+                    </div>)
+                : null
+            }
+            
             <div className="row">
                 <div className="col-md-6">
                     <img src={shoesDetail.src} width="100%" alt="shoesimg.jpg" />

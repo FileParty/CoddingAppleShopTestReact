@@ -21,9 +21,10 @@ function App() {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
-              <Nav.Link ><Link to="/">Home</Link></Nav.Link>
-              <Nav.Link ><Link to="/detail">Detail</Link></Nav.Link>
+              <Nav.Link as={Link } to="/">Home</Nav.Link>
+              <Nav.Link as={Link } to="/detail">Detail</Nav.Link>
               {/* router 문법 중 link를 사용하여 이동을 할수 있음 a태그의 href처럼 to속성을 사용하면됨 */}
+              {/* as를 사용해 변수값에 들어온 태그명처럼 사용할 수 있음 */}
               <NavDropdown title="Dropdown" id="basic-nav-dropdown">
                 <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
                 <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
