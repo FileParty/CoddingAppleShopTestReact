@@ -1,9 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import React, { useContext, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 // styled-components 컴포넌트 가져오기
 import './Detail.scss';
 // css파일 import 해오는 법
+
+import {재고context} from './App.js';
 
 let 박스 = styled.div`
     padding: 20px;
@@ -40,8 +43,16 @@ function DetailComponent(props) {
     let [alertState, alertStateChg ] = useState(true);
     let [inData, inDataChg] = useState("");
 
+    // context 가져오기
+    let 재고 = useContext(재고context);
+
     // 최신버전 hook useEffect
     useEffect(()=>{
+        // detail컴포넌트가 호출될때 ajax요청 처리
+        //axios.get();
+        // 또한 이런것들은 최초 호출시에만 사용되어야하므로 useEffect 매개변수에 []을 넣어주자..
+
+
         // 컴포넌트가 mount(실행) 되었을때
         // 컴포넌트가 update 될 때
         // 특정 코드를 실행할 수 있음
@@ -97,13 +108,18 @@ function DetailComponent(props) {
             
             <div className="row">
                 <div className="col-md-6">
-                    <img src={shoesDetail.src} width="100%" alt="shoesimg.jpg" />
+                    <img src={ 'https://codingapple1.github.io/shop/shoes' + (shoesDetail.id + 1) + '.jpg' } width="100%" alt="shoesimg.jpg" />
                 </div>
                 <div className="col-md-6 mt-4">
                     <h4 className="pt-5">{shoesDetail.title}</h4>
                     <p>{shoesDetail.content}</p>
                     <p>{shoesDetail.price}원</p>
-                    <button className="btn btn-danger">주문하기</button> 
+                    <Info 재고={props.재고}></Info>
+                    <button className="btn btn-danger" onClick={ ()=>{
+                        let itemCount = [...props.재고];
+                        itemCount[0] = itemCount[0] - 1;
+                        props.재고변경(itemCount);
+                    }}>주문하기</button> 
                     <button className="btn btn-danger" onClick={ ()=>{
                         //history.goBack(); // 뒤로가기(이전 페이지로 이동)
                         history.push("/"); // push 특정경로로 이동
@@ -113,5 +129,13 @@ function DetailComponent(props) {
         </div>
     )
 }
+
+function Info(props) {
+    return (
+      <p>재고 : {props.재고[0]}</p>
+    )
+  }
+
+
 // 또한 외부 js 파일을 호출하기 위한 세팅또한 필요하다
 export default DetailComponent;

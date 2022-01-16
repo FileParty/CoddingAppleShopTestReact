@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
+import React, { useContext, useState } from 'react';
+import { Navbar, Nav, Container, NavDropdown, Spinner } from 'react-bootstrap';
 import './App.css';
 import Data from './data.js';
 import DetailComponent from './DetailComponent';
@@ -9,9 +9,20 @@ import DetailComponent from './DetailComponent';
 import { Link, Route, Switch } from 'react-router-dom';
 // 리액트 라우터를 사용하기 위한 import
 
+import axios from 'axios';
+// axios 라이브러리 import
+
+export let 재고context = React.createContext();
+// context만들기
+// 1. React.createContext()로 범위생성
+// 2. 같은 값을 공유할 HTML을 범위로 싸매기
+// # export로 외부파일에서 import를 할 수 있도록 만들 수 있다
+
 function App() {
 
   let [shoes, shoesChange] = useState(Data);
+  let [loading, loadingState] = useState(false);
+  let [재고, 재고변경] = useState([10,11,12]);
 
   return (
     <div className="App">
@@ -53,18 +64,55 @@ function App() {
           {/* 부트스트랩을 이렇게 className으로도 사용할 수 있다
             단, 이런 방식으로 사용하기 위해서는 index.html에서 부트스트랩 link태그를 넣어야함 */}
           <div className="container">
+
+            <재고context.Provider value={재고}>
+            {/* 값을 공유를 원하는 html들을 context태그로 감싸기 value에는 공유를 원하는 값을 넣기 */}
             <div className="row">
               {
                 shoes.map((value, key)=>{
                   return <ShoesComponent key={key} shoes={value} idx={key} />
                 })
               }
+              {
+                loading == true
+                ? (<LoadingComponent loading={loading} ></LoadingComponent>)
+                : null
+              }
             </div>
+            </재고context.Provider>
+
+            <button className="btn btn-primary" onClick={()=>{ 
+
+              // post방식으로 전달하는 방법
+              //axios.post('서버URL', {id : 'test01', pw : 1234});
+
+              //로딩중이라는 ui 띄우기
+              loadingState(true);
+              axios.get('https://codingapple1.github.io/shop/data2.json')
+                .then((result)=>{
+                  // 로딩중 ui 삭제
+                  loadingState(false);
+                  console.log("axios 미션 성공!");
+                  shoesChange([...shoes, ...result.data]);
+                  // 새로운 js 문법 [...객체, ...합칠객체]로 하나의 리스트객체로 변환이 가능하다. 
+                })
+                .catch(()=>{
+                  // 로딩중 ui 삭제2
+                  loadingState(false);
+                  console.log("axios 미션 실패");
+                });
+              // .then() : ajax가 요청 성공시 처리할 코드
+              // .catch() : ajax가 요청 실패시 처리할 코드
+
+            }}>더보기</button>
+
           </div>
         </Route>
         <Route path="/detail/:id">
+          <재고context.Provider value={재고}>
           {/* 무엇을 입력하든간에 /detail로 가주세요라는 의미 url 파라미터 문법임 */}
-          <DetailComponent shoes={shoes} />
+          <DetailComponent shoes={shoes} 재고={재고} 재고변경={재고변경}/>
+          </재고context.Provider>
         </Route>
         {/* <Route path="/어쩌구" component={Modal}></Route> */}
               
@@ -74,18 +122,35 @@ function App() {
               <div>아무거나 적었을때 이거 보여주셈</div>
         </Route>
       </Switch>
-      
-
+      { 
+      }
     </div>
   );
 }
 
 function ShoesComponent(props) {
+
+  let 재고 = useContext(재고context);
+
   return (
     <div className="col-md-4">
-      <img src={ 'https://codingapple1.github.io/shop/shoes' + (props.idx + 1) + '.jpg' } width="100%" alt="신발이미지.jpg"/>
+      <img src={ 'https://codingapple1.github.io/shop/shoes' + (props.shoes.id + 1) + '.jpg' } width="100%" alt="신발이미지.jpg"/>
       <h4>{props.shoes.title}</h4>
       <p>{props.shoes.content} & {props.shoes.price}$</p>
+      <Test></Test>
+    </div>
+  )
+}
+
+function Test() {
+  let 재고2 = useContext(재고context);
+  return <p>{재고2[0]}</p>
+}
+
+function LoadingComponent(props) {
+  return (
+    <div className="loading_div">
+      <Spinner animation="border" variant="primary" />
     </div>
   )
 }
