@@ -41,3 +41,18 @@ div.container {
 }
 // @extend : .my-alert의 모든 속성을 복사 붙여넣기한다
 
+
+// react-transition-group class
+// wow라는 클래스명 + -enter, --enter-active
+// 클래스명-enter : 애니메이션 시작시 적용할 css
+// 클래스명--enter-active : 애니메이션 동작 떄 적용할 css
+.wow-enter {
+    opacity: 0;
+    background: blanchedalmond;
+}
+
+.wow--enter-active {
+    opacity: 1;
+    transition: all 500ms;
+    background: white;
+}

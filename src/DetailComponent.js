@@ -2,11 +2,15 @@ import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import styled from 'styled-components';
+import { Navbar, Nav, Container, NavDropdown, Spinner } from 'react-bootstrap';
 // styled-components 컴포넌트 가져오기
 import './Detail.scss';
 // css파일 import 해오는 법
 
 import {재고context} from './App.js';
+
+import { CSSTransition } from 'react-transition-group';
+// react-transition-group 라이브러리 import
 
 let 박스 = styled.div`
     padding: 20px;
@@ -45,6 +49,10 @@ function DetailComponent(props) {
 
     // context 가져오기
     let 재고 = useContext(재고context);
+
+    // tab state
+    let [누른탭, 누른탭변경] = useState(0);
+    let [스위치, 스위치변경] = useState(false);
 
     // 최신버전 hook useEffect
     useEffect(()=>{
@@ -126,8 +134,43 @@ function DetailComponent(props) {
                     } }>뒤로가기</button>
                 </div>
             </div>
+
+            <Nav className="mt-5" variant="tabs" defaultActiveKey="link-0">
+                <Nav.Item>
+                    <Nav.Link eventKey="link-0" onClick={()=>{ 스위치변경(false); 누른탭변경(0); }}>탭1</Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                    <Nav.Link eventKey="link-1" onClick={()=>{ 스위치변경(false); 누른탭변경(1) }}>탭2</Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                    <Nav.Link eventKey="link-2" onClick={()=>{ 스위치변경(false); 누른탭변경(2) }}>탭3</Nav.Link>
+                </Nav.Item>
+            </Nav>
+            
+            <CSSTransition in={스위치} classNames="wow" timeout={500}>
+                {/* in: 애니메이션 동작스위치 classNames:동작할 애니메이션 class명 timeout : 애니메이션 지속시간 
+                    in에 원할떄 스위치를 켜면 된다
+                */}
+                <TabContnet 누른탭={누른탭} 스위치변경={스위치변경} />
+            </CSSTransition>
+
         </div>
     )
+}
+
+function TabContnet(props) {
+
+    useEffect(()=>{
+        props.스위치변경(true);
+    });
+
+   if(props.누른탭 == 0) {
+       return <div>0번쨰 내용입니다.</div>
+   } else if(props.누른탭 == 1) {
+       return <div>1번쨰 내용입니다.</div>
+   } else if(props.누른탭 == 2) {
+       return <div>2번쨰 내용입니다.</div>
+   }
 }
 
 function Info(props) {
