@@ -38,6 +38,7 @@ div.container {
 .my-alert2 {
     @extend .my-alert;
     background: #ffe591;
+    text-align: center;
 }
 // @extend : .my-alert의 모든 속성을 복사 붙여넣기한다
 
@@ -55,4 +56,12 @@ div.container {
     opacity: 1;
     transition: all 500ms;
     background: white;
+}
+
+.alertClose-enter {
+    opacity: 1;
+}
+
+.alertClose--enter-active {
+    opacity: 0;
 }

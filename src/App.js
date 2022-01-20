@@ -12,11 +12,15 @@ import { Link, Route, Switch } from 'react-router-dom';
 import axios from 'axios';
 // axios 라이브러리 import
 
+import Cart from "./Cart";
+
 export let 재고context = React.createContext();
 // context만들기
 // 1. React.createContext()로 범위생성
 // 2. 같은 값을 공유할 HTML을 범위로 싸매기
 // # export로 외부파일에서 import를 할 수 있도록 만들 수 있다
+
+
 
 function App() {
 
@@ -115,15 +119,19 @@ function App() {
           </재고context.Provider>
         </Route>
         {/* <Route path="/어쩌구" component={Modal}></Route> */}
-              
+        
+        <Route path="/cart">
+            <Cart></Cart>
+        </Route>
         
         <Route path="/:id">
         {/* :id는 매개변수를 의미. */}
               <div>아무거나 적었을때 이거 보여주셈</div>
         </Route>
+
+        
+
       </Switch>
-      { 
-      }
     </div>
   );
 }

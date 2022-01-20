@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { Navbar, Nav, Container, NavDropdown, Spinner } from 'react-bootstrap';
+import { Nav } from 'react-bootstrap';
 // styled-components 컴포넌트 가져오기
 import './Detail.scss';
 // css파일 import 해오는 법
