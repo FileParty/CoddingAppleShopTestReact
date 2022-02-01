@@ -6,7 +6,7 @@ import DetailComponent from './DetailComponent';
 // import { name, name2 } from './data.js';
 // import시 export로 선언된 데이터들을 그대로 받아오면 된다
 
-import { Link, Route, Switch } from 'react-router-dom';
+import { Link, Route, Switch, useHistory } from 'react-router-dom';
 // 리액트 라우터를 사용하기 위한 import
 
 import axios from 'axios';
@@ -32,7 +32,7 @@ function App() {
     <div className="App">
       <Navbar bg="light" expand="lg">
         <Container>
-          <Navbar.Brand href="#home">KimShop</Navbar.Brand>
+          <Navbar.Brand href="/">KimShop</Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
@@ -139,9 +139,11 @@ function App() {
 function ShoesComponent(props) {
 
   let 재고 = useContext(재고context);
+  let history = useHistory();
 
   return (
-    <div className="col-md-4">
+    <div className="col-md-4" onClick={()=>{ history.push('/detail/' + props.shoes.id); }}>
+      {/* 보통 compoennt에 onClick를 달지않고 여기다가 달아놓는다 */}
       <img src={ 'https://codingapple1.github.io/shop/shoes' + (props.shoes.id + 1) + '.jpg' } width="100%" alt="신발이미지.jpg"/>
       <h4>{props.shoes.title}</h4>
       <p>{props.shoes.content} & {props.shoes.price}$</p>
@@ -162,6 +164,23 @@ function LoadingComponent(props) {
     </div>
   )
 }
+
+// function Component() {
+//   var 현재상태 = 'info';
+//   return (
+//     <div>
+//       {
+//         { 
+//            info : <p>상품정보</p>,
+//            shipping : <p>배송관련</p>,
+//            refund : <p>환불약관</p>
+//         }[현재상태]
+//       }
+
+//     </div>
+//   )
+// } 
+// enum : 객체를 만들고 객체의 마지막에 []를 붙여서 저 [현재상태]값에 따라 info, shipping, refund를 반환한다
 
 
 

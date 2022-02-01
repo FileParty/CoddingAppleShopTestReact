@@ -15,18 +15,40 @@ import { combineReducers, createStore } from 'redux';
 // contextAPI처럼 해당 태그로 감싸져있는 부분에 데이터공유를 이룰 수 있다.
 // App태그를 감쌌으므로 앱전체에서 데이터 공유를 할 수 있다.
 let defaultState = [
-  { id:0,name:'멋진신발', quan:2 },
-    { id:1,name:'멋진모자', quan:1 },
-    { id:2,name:'멋진바지', quan:10 },
-    { id:3,name:'멋진양말', quan:255 },
-    { id:4,name:'멋진셔츠', quan:0 },
-    { id:5,name:'멋진패딩', quan:5 }
+  { id:0,name:'White and Black', quan:2 },
+    { id:11,name:'멋진모자', quan:1 },
+    { id:12,name:'멋진바지', quan:10 },
+    { id:13,name:'멋진양말', quan:255 },
+    { id:14,name:'멋진셔츠', quan:0 },
+    { id:15,name:'멋진패딩', quan:5 }
 ];
 let alertState = true;
 // redux에선 state 데이터의 수정방법을 미리 정의합니다...
 function reducer(state = defaultState, 액션) {
   //console.log(액션);
-  if( 액션.type === '수량증가' ) {
+  if ( 액션.type === '항목추가' ) {
+    let copy = [...state];
+    let found = state.findIndex((a)=>{return a.id === 액션.payload.id});
+    if(found >= 0) {
+      copy[found].quan += parseInt(액션.payload.quan);
+    } else {
+      copy.push(액션.payload);
+    }
+    // let copy = [...state];
+    // let cloneChk = true;
+    // copy.map((obj)=>{
+    //   if(obj.id == 액션.payload.id) {
+    //     obj.quan++;
+    //     cloneChk = false;
+    //   }
+    // })
+    // if(cloneChk) copy.push(액션.payload);
+    console.log(copy);
+    return copy;
+  }
+  else if( 액션.type === '수량증가' ) {
+    // dispatch를 할떄 실어보낸 데이터를 받아보자
+    console.log(액션.payload);
     // store 데이터를 변경하는 방법 정의
     let copyState = [...state];
     copyState[액션.id].quan++;

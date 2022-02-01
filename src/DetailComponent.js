@@ -12,6 +12,8 @@ import {재고context} from './App.js';
 import { CSSTransition } from 'react-transition-group';
 // react-transition-group 라이브러리 import
 
+import { connect } from 'react-redux';
+
 let 박스 = styled.div`
     padding: 20px;
 `;
@@ -45,7 +47,7 @@ let 제목 = styled.h4`
 function DetailComponent(props) {
 
     let [alertState, alertStateChg ] = useState(true);
-    let [inData, inDataChg] = useState("");
+    let [inData, inDataChg] = useState(1);
 
     // context 가져오기
     let 재고 = useContext(재고context);
@@ -104,8 +106,7 @@ function DetailComponent(props) {
                 <제목 className="red" 색상={"blue"}>상세페이지입니다.</제목>
             </박스>
 
-            <input onInput={(e)=>{inDataChg(e.target.value)}}/>
-            {inData}
+            
             {
                 alertState === true
                 ? (<div className="my-alert">
@@ -123,10 +124,13 @@ function DetailComponent(props) {
                     <p>{shoesDetail.content}</p>
                     <p>{shoesDetail.price}원</p>
                     <Info 재고={props.재고}></Info>
+                    <span>주문수량 : </span><input value={inData} onInput={(e)=>{inDataChg(e.target.value)}}/><br/><br/>
                     <button className="btn btn-danger" onClick={ ()=>{
                         let itemCount = [...props.재고];
                         itemCount[0] = itemCount[0] - 1;
                         props.재고변경(itemCount);
+                        props.dispatch({type:'항목추가',payload:{id:shoesDetail.id,name:shoesDetail.title, quan:inData }});
+                        history.push('/cart');
                     }}>주문하기</button> 
                     <button className="btn btn-danger" onClick={ ()=>{
                         //history.goBack(); // 뒤로가기(이전 페이지로 이동)
@@ -179,6 +183,11 @@ function Info(props) {
     )
   }
 
-
+function state를props화(state){
+    return {
+        state : state.reducer,
+        alertStat : state.reducer2
+    }
+}
+export default connect(state를props화)(DetailComponent)
 // 또한 외부 js 파일을 호출하기 위한 세팅또한 필요하다
-export default DetailComponent;
